@@ -107,7 +107,6 @@ class CreditCardFraudDetection:
         plt.title('Class Distribution (0: Normal, 1: Fraud)')
         plt.xlabel('Class')
         plt.ylabel('Count')
-        plt.savefig('plots/class_distribution.png')
 
         # Plot correlation matrix for a subset of features
         plt.figure(figsize=(12, 10))
@@ -116,10 +115,8 @@ class CreditCardFraudDetection:
         sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f')
         plt.title('Correlation Matrix of Selected Features')
         plt.tight_layout()
-        plt.savefig('plots/correlation_matrix.png')
         plt.close('all')
 
-        print("Plots saved to 'plots' directory.")
         return self.df
 
     def preprocess_data(self, test_size=0.2):
@@ -225,7 +222,6 @@ class CreditCardFraudDetection:
         plt.title(f'{model_name} Confusion Matrix')
         plt.xlabel('Predicted Label')
         plt.ylabel('True Label')
-        plt.savefig(f'plots/{model_name.lower().replace(" ", "_")}_confusion_matrix.png')
 
         # Plot ROC curve if possible
         if roc_auc is not None:
@@ -237,7 +233,6 @@ class CreditCardFraudDetection:
             plt.ylabel('True Positive Rate')
             plt.title(f'{model_name} ROC Curve')
             plt.legend(loc='lower right')
-            plt.savefig(f'plots/{model_name.lower().replace(" ", "_")}_roc_curve.png')
 
         plt.close('all')
 
@@ -255,9 +250,6 @@ class CreditCardFraudDetection:
 
         # Evaluate
         self.evaluate_model(knn, self.X_test, self.y_test, "KNN")
-
-        # Save model
-        joblib.dump(knn, 'models/knn_model.pkl')
 
         end_time = time.time()
         print(f"Training and evaluation completed in {end_time - start_time:.2f} seconds")
@@ -279,9 +271,6 @@ class CreditCardFraudDetection:
 
         # Evaluate
         self.evaluate_model(gnb, self.X_test, self.y_test, "Naive Bayes")
-
-        # Save model
-        joblib.dump(gnb, 'models/naive_bayes_model.pkl')
 
         end_time = time.time()
         print(f"Training and evaluation completed in {end_time - start_time:.2f} seconds")
@@ -334,11 +323,7 @@ class CreditCardFraudDetection:
         sns.barplot(x='Importance', y='Feature', data=feature_importance.head(15))
         plt.title('Logistic Regression Feature Importance')
         plt.tight_layout()
-        plt.savefig('plots/logistic_regression_feature_importance.png')
         plt.close()
-
-        # Save model
-        joblib.dump(lr, 'models/logistic_regression_model.pkl')
 
         end_time = time.time()
         print(f"Training and evaluation completed in {end_time - start_time:.2f} seconds")
@@ -409,7 +394,6 @@ class CreditCardFraudDetection:
         plt.xlabel('Epochs')
         plt.ylabel('Loss')
         plt.legend()
-        plt.savefig('plots/autoencoder_training_loss.png')
         plt.close()
 
         # Use autoencoder for anomaly detection
@@ -444,7 +428,6 @@ class CreditCardFraudDetection:
         plt.title('Autoencoder Confusion Matrix')
         plt.xlabel('Predicted Label')
         plt.ylabel('True Label')
-        plt.savefig('plots/autoencoder_confusion_matrix.png')
 
         # Plot reconstruction error distribution
         plt.figure(figsize=(10, 6))
@@ -455,7 +438,6 @@ class CreditCardFraudDetection:
         plt.xlabel('Reconstruction Error (MSE)')
         plt.ylabel('Count')
         plt.legend()
-        plt.savefig('plots/autoencoder_reconstruction_error.png')
         plt.close()
 
         # Store results
@@ -468,9 +450,6 @@ class CreditCardFraudDetection:
             'threshold': threshold,
             'model': autoencoder
         }
-
-        # Save model
-        autoencoder.save('models/autoencoder_model.h5')
 
         end_time = time.time()
         print(f"Training and evaluation completed in {end_time - start_time:.2f} seconds")
@@ -534,9 +513,6 @@ class CreditCardFraudDetection:
         print("\nModel Performance Comparison:")
         print(comparison_df)
 
-        # Save comparison to CSV
-        comparison_df.to_csv('results/model_comparison.csv', index=False)
-
         # Plot comparison metrics
         plt.figure(figsize=(12, 8))
 
@@ -564,13 +540,9 @@ class CreditCardFraudDetection:
         plt.xticks([r + width * 2 for r in range(len(models))], comparison_df['Model'])
         plt.legend()
 
-        # Adjust layout and save
+        # Adjust layout
         plt.tight_layout()
-        plt.savefig('plots/model_comparison.png')
         plt.close()
-
-        print("\nModel comparison completed. Results saved to 'results/model_comparison.csv'")
-        print("Comparison plot saved to 'plots/model_comparison.png'")
 
         return comparison_df
 
@@ -604,9 +576,6 @@ def main():
     comparison = fraud_detector.compare_models()
 
     print("\nFraud detection pipeline completed successfully!")
-    print("Models saved to 'models' directory")
-    print("Results saved to 'results' directory")
-    print("Plots saved to 'plots' directory")
 
 
 if __name__ == "__main__":
